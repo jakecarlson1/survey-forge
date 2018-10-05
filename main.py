@@ -1,4 +1,5 @@
 import argparse
+from forge.generator import Generator
 
 def build_arg_parser():
     parser = argparse.ArgumentParser(prog='survey-forge')
@@ -16,7 +17,9 @@ def build_arg_parser():
 def main():
     parser = build_arg_parser()
     args = parser.parse_args()
-    print(args)
+    generator = Generator(vars(args))
+    print(generator)
+    print(generator.generate_random_data().head())
 
 if __name__ == '__main__':
     main()
