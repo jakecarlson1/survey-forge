@@ -20,6 +20,7 @@ def main():
     generator = Generator(vars(args))
     print(generator)
     print(generator.generate_random_data().head())
+    print(generator.calc_coeff_alpha())
 
 if __name__ == '__main__':
     main()
