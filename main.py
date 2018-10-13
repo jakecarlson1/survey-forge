@@ -22,6 +22,7 @@ def main():
     print(generator.generate_random_data().head())
     print(generator.calc_coeff_alpha())
     generator.generate_data_to_match_alpha()
+    print(generator.calc_coeff_alpha())
 
 if __name__ == '__main__':
     main()
