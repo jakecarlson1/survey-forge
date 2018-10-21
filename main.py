@@ -11,6 +11,8 @@ def build_arg_parser():
                         help='Number of points in the Likert scale for each item', metavar='num')
     parser.add_argument('-a', '--coeff-alpha', type=float, default=0.80,
                         help='Cronbach\'s alpha for the resulting survey data', metavar='float')
+    parser.add_argument('-f', '--output-file', type=str, default="output.csv",
+                        help='File to write final data set to', metavar='path')
     
     return parser
 
@@ -23,6 +25,7 @@ def main():
     print(generator.calc_coeff_alpha())
     generator.generate_data_to_match_alpha()
     print(generator.calc_coeff_alpha())
+    generator.write(vars(args)['output_file'])
 
 if __name__ == '__main__':
     main()

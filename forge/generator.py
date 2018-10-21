@@ -30,6 +30,7 @@ class Generator(object):
         if not isinstance(self._data, pd.DataFrame):
             print("Cannot take coeff alpha of empty data set")
             return
+
         vars_of_items = self._data.var(axis=0, ddof=0)
         sums_of_respondents = self._data.sum(axis=1)
         self._realized_alpha = self.num_items / (self.num_items - 1) * \
@@ -145,4 +146,11 @@ class Generator(object):
 
         # sample values for items such that the score is met for each respondent
         self._data = self._gen_data_with_distributions(scores, variance_of_scores, mean_per_item, variance_per_item)
+
+    def write(self, file_name):
+        if not isinstance(self._data, pd.DataFrame):
+            print("No data to print")
+            return
+
+        self._data.to_csv(file_name)
 
