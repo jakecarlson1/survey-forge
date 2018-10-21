@@ -8,6 +8,7 @@ class Generator(object):
         self.scale_max = params['scale']
         self.scale_min = 1
         self.alpha = params['coeff_alpha']
+        self.alpha_tol = params['alpha_tol']
         self.data_size = (self.num_respondents, self.num_items)
         self._data = None
         self._realized_alpha = None
@@ -127,6 +128,10 @@ class Generator(object):
         return data
 
     def generate_data_to_match_alpha(self):
+        while not isinstance(self._data, pd.DataFrame) or np.absolute(self.calc_coeff_alpha() - self.alpha) > self.alpha_tol:
+            self._generate_data_to_match_alpha()
+
+    def _generate_data_to_match_alpha(self):
         # goal is to make sum of variance in item responses / variance in 
         # respondent scores equal this value
         value_to_match = 1 - ((self.num_items - 1) / self.num_items) * self.alpha        
