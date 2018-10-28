@@ -4,14 +4,9 @@ import pandas as pd
 class Generator(object):
     def __init__(self, params):
         self.num_respondents = params['num_respondents']
-        self.data_size = (self.num_respondents, self.num_items)
+        self.data_size = (self.num_respondents, 0)
         self._data = None
         self.output_file = params['output_file']
-
-    def __str__(self):
-        return "n: {}\t i: {}\t s: {}\t a: {}".format(
-            self.num_respondents, self.num_items, self.scale_max, self.alpha
-        )
 
     def generate_random_data(self):
         self._data = pd.DataFrame(

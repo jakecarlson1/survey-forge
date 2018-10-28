@@ -12,6 +12,12 @@ class AlphaGenerator(Generator):
         self.alpha_tol = params['alpha_tol']
         self._realized_alpha = None
 
+    def __str__(self):
+        return "n: {}\t i: {}\t s: {}\t a: {}".format(
+            self.num_respondents, self.num_items, self.scale_max, self.alpha
+        )
+
+
     def calc_coeff_alpha(self):
         if not isinstance(self._data, pd.DataFrame):
             print("Cannot take coeff alpha of empty data set")

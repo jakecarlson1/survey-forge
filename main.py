@@ -1,5 +1,5 @@
 import argparse
-from forge import AlphaGenerator
+from forge import AlphaGenerator, RegressionGenerator
 
 def build_arg_parser():
     parser = argparse.ArgumentParser(prog='survey-forge')
@@ -32,18 +32,25 @@ def build_arg_parser():
     return parser
 
 def run_alpha(args):
-    print(args)
     generator = AlphaGenerator(vars(args))
+    print(generator)
     generator.generate_data()
     print(generator.calc_coeff_alpha())
     generator.write()
 
 def run_regression(args):
     print(args)
+    generator = RegressionGenerator(vars(args))
+    print(generator)
 
 def main():
     parser = build_arg_parser()
     args = parser.parse_args()
+    if 'func' in vars(args):
+        args.func(args)
+    else:
+        print("Subcommand not specified, use -h for help")
 
 if __name__ == '__main__':
     main()
+
