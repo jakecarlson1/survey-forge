@@ -3,3 +3,7 @@
 
 # pycache
 __pycache__/
+
+# output file
+output.csv
+

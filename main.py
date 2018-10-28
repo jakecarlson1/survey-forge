@@ -1,5 +1,5 @@
 import argparse
-from forge.generator import Generator
+from forge import AlphaGenerator
 
 def build_arg_parser():
     parser = argparse.ArgumentParser(prog='survey-forge')
@@ -21,9 +21,9 @@ def build_arg_parser():
 def main():
     parser = build_arg_parser()
     args = parser.parse_args()
-    generator = Generator(vars(args))
+    generator = AlphaGenerator(vars(args))
     print(generator)
-    generator.generate_data_to_match_alpha()
+    generator.generate_data()
     print(generator.calc_coeff_alpha())
     generator.write(vars(args)['output_file'])
 
