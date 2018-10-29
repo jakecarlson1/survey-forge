@@ -23,8 +23,8 @@ def build_arg_parser():
     reg_parser = sub_parsers.add_parser('regression')
     reg_parser.add_argument('-s', '--scales', type=int, nargs='+', metavar='num', required=True,
                             help='Scale for each predictor feature [0, num]. The number of features will be infered from this list')
-    reg_parser.add_argument('-p', '--pred-scale', type=int, default=1, metavar='num',
-                            help='Scale for the prediction column')
+    reg_parser.add_argument('-t', '--target-scale', type=int, default=1, metavar='num',
+                            help='Scale for the target column')
     reg_parser.add_argument('-b', '--norm-betas', type=float, nargs='+', metavar='float', required=True,
                             help='Normalized regression weights, must be same length as --scales')
     reg_parser.set_defaults(func=run_regression)
@@ -42,6 +42,7 @@ def run_regression(args):
     print(args)
     generator = RegressionGenerator(vars(args))
     print(generator)
+    generator.generate_data()
 
 def main():
     parser = build_arg_parser()

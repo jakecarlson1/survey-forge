@@ -6,6 +6,7 @@ class AlphaGenerator(Generator):
     def __init__(self, params):
         super().__init__(params)
         self.num_items = params['num_items']
+        self.data_size = (self.num_respondents, self.num_items)
         self.scale_max = params['scale']
         self.scale_min = 1
         self.alpha = params['coeff_alpha']
@@ -16,7 +17,6 @@ class AlphaGenerator(Generator):
         return "n: {}\t i: {}\t s: {}\t a: {}".format(
             self.num_respondents, self.num_items, self.scale_max, self.alpha
         )
-
 
     def calc_coeff_alpha(self):
         if not isinstance(self._data, pd.DataFrame):
