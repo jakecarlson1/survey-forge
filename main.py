@@ -27,6 +27,8 @@ def build_arg_parser():
                             help='Scale for the target column')
     reg_parser.add_argument('-b', '--norm-betas', type=float, nargs='+', metavar='float', required=True,
                             help='Normalized regression weights, must be same length as --scales')
+    reg_parser.add_argument('-d', '--betas-tol', type=float, nargs='+', metavar='float', required=True,
+                            help='Tolerance for the regression weights, must be same length as --scales')
     reg_parser.set_defaults(func=run_regression)
     
     return parser
