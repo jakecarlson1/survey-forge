@@ -37,6 +37,8 @@ class RegressionGenerator(Generator):
         plt.show()
 
         # TODO: generate self._data
+        self._data = self._gen_data_from_normalized_features(norm_features, norm_target)
+        print(self._data)
 
     def _gen_normalized_features_for_betas(self):
         features = []
@@ -83,4 +85,20 @@ class RegressionGenerator(Generator):
         if np.absolute(reg.coef_[0] - self.betas[0]) > self.betas_tol[0]:
             return False
         return True
+
+    def _gen_data_from_normalized_features(self, norm_features, norm_targets):
+        data = pd.DataFrame(
+            index=["r{}".format(r) for r in range(self.num_respondents)],
+            columns=["f{}".format(i) for i in range(self.num_feats)] + ["t0"]
+                # ["t{}".format(t) for t in self.target_scale]
+        )
+
+        for i in range(self.num_feats):
+            feat = norm_features[i] * self.scales[i]
+            data.iloc[:,i] = feat
+
+        target = [t * self.target_scale for t in norm_targets]
+        data.iloc[:,-1] = target
+
+        return data
 
