@@ -30,15 +30,7 @@ class RegressionGenerator(Generator):
 
             norm_target = self._gen_normalized_target_for_features(norm_features, norm_means, vals_to_match)
 
-        residuals = norm_target - norm_features[0] * self.betas[0]
-        r = sorted(residuals)
-        import matplotlib.pyplot as plt
-        plt.hist(r, bins=int(self.num_respondents/2))
-        plt.show()
-
-        # TODO: generate self._data
         self._data = self._gen_data_from_normalized_features(norm_features, norm_target)
-        print(self._data)
 
     def _gen_normalized_features_for_betas(self):
         features = []

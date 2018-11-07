@@ -45,6 +45,7 @@ def run_regression(args):
     generator = RegressionGenerator(vars(args))
     print(generator)
     generator.generate_data()
+    generator.write()
 
 def main():
     parser = build_arg_parser()
