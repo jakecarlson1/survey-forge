@@ -1,5 +1,5 @@
 import argparse
-from forge import AlphaGenerator, RegressionGenerator
+from forge import AlphaGenerator, AnovaGenerator, RegressionGenerator
 
 def build_arg_parser():
     parser = argparse.ArgumentParser(prog='survey-forge')
@@ -9,6 +9,15 @@ def build_arg_parser():
                         help='File to write final data set to', metavar='path')
 
     sub_parsers = parser.add_subparsers()
+    anova_parser = sub_parsers.add_parser('anova')
+    anova_parser.add_argument('-g', '--num-groups', type=int, default=5, metavar='num',
+                              help='Number of groups')
+    anova_parser.add_argument('-f', '--f-stat', type=float, default=1.5, metavar='float',
+                              help='The F-statistic of the resulting data')
+    anova_parser.add_argument('-s', '--scale', type=int, default=20, metavar='num',
+                              help='Scale for the group means')
+    anova_parser.set_defaults(func=run_anova)
+
     alpha_parser = sub_parsers.add_parser('alpha')
     alpha_parser.add_argument('-i', '--num-items', type=int, default=40, metavar='num',
                               help='Number of items in the survey')
@@ -33,6 +42,12 @@ def build_arg_parser():
     
     return parser
 
+def run_anova(args):
+    print(args)
+    generator = AnovaGenerator(vars(args))
+    print(generator)
+    generator.generate_data()
+
 def run_alpha(args):
     generator = AlphaGenerator(vars(args))
     print(generator)
@@ -41,7 +56,6 @@ def run_alpha(args):
     generator.write()
 
 def run_regression(args):
-    print(args)
     generator = RegressionGenerator(vars(args))
     print(generator)
     generator.generate_data()
