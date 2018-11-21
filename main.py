@@ -50,6 +50,7 @@ def run_anova(args):
     generator = AnovaGenerator(vars(args))
     print(generator)
     generator.generate_data()
+    generator.write()
 
 def run_alpha(args):
     generator = AlphaGenerator(vars(args))

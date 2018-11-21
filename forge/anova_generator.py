@@ -15,11 +15,10 @@ class AnovaGenerator(Generator):
 
     def __str__(self):
         return "n: {}\t g: {}\t s: {}\t f:{}\t tol:{}".format(
-            self.num_respondents, self.num_groups, self.scale, self.f, self.tol
+            self.num_respondents, self.num_groups, self.scale, self.f, self.f_tol
         )
 
     def generate_data(self):
-        self._data = None
         while self._data == None or not self.is_valid():
             means_for_groups = self._gen_means_for_groups()
 
@@ -30,6 +29,8 @@ class AnovaGenerator(Generator):
             value_to_match = sst / (self.num_groups - 1) / self.f * (self.size - self.num_groups)
 
             self._data = self._gen_data_to_match_sum_square_error(value_to_match, means_for_groups)
+
+        self._data = self._convert_data_to_df(self._data)
 
     def _gen_means_for_groups(self):
         return np.random.randint(1, self.scale, self.num_groups)
@@ -46,6 +47,18 @@ class AnovaGenerator(Generator):
             results.append(group_data)
 
         return results
+
+    def _convert_data_to_df(self, data):
+        result = pd.DataFrame(
+            index=["r{}".format(r) for r in range(self.num_respondents)],
+            columns=["g{}".format(i) for i in range(self.num_groups)]
+        )
+        
+        for i, d in enumerate(data):
+            result.iloc[:,i] = d
+
+        return result
+
 
     def _gen_data_with_mean_and_squared_deviation(self, mean, sdev):
         std = 0.8
