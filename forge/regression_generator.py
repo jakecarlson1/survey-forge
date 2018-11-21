@@ -79,7 +79,6 @@ class RegressionGenerator(Generator):
         data = pd.DataFrame(
             index=["r{}".format(r) for r in range(self.num_respondents)],
             columns=["f{}".format(i) for i in range(self.num_feats)] + ["t0"]
-                # ["t{}".format(t) for t in self.target_scale]
         )
 
         for i in range(self.num_feats):

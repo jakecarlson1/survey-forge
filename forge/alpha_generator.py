@@ -101,7 +101,6 @@ class AlphaGenerator(Generator):
         rem_scores = scores
 
         for i, m in enumerate(mean_per_item):
-            #data.iloc[:,i] = np.random.normal(m, variance_per_item[i], self.num_respondents) 
             n = self.scale_max
             p = (-1 + np.sqrt(1 + 4 * variance_per_item[i])) / 2
             vals_for_item = np.random.binomial(n, p if p < 1 else 1, self.num_respondents) 

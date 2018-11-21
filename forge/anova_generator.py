@@ -58,7 +58,6 @@ class AnovaGenerator(Generator):
 
         return result
 
-
     def _gen_data_with_mean_and_squared_deviation(self, mean, sdev):
         std = 0.8
         approx_value = np.sqrt(sdev/self.num_respondents) + mean
