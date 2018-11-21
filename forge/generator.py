@@ -18,8 +18,12 @@ class Generator(object):
         return self._data
 
     def generate_data(self):
+        n_iters = 0
         while not isinstance(self._data, pd.DataFrame) or not self._is_valid():
             self._generate_data()
+            n_iters += 1
+
+        print("Num iterations:", n_iters)
 
     def write(self):
         if not isinstance(self._data, pd.DataFrame):
