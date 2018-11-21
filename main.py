@@ -16,6 +16,9 @@ def build_arg_parser():
                               help='The F-statistic of the resulting data')
     anova_parser.add_argument('-s', '--scale', type=int, default=20, metavar='num',
                               help='Scale for the group means')
+    anova_parser.add_argument('-t', '--f-stat-tol', type=float, default=0.05, metavar='float',
+                              help='Tolerance for F-statistic of the resulting data')
+
     anova_parser.set_defaults(func=run_anova)
 
     alpha_parser = sub_parsers.add_parser('alpha')
