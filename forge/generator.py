@@ -18,7 +18,8 @@ class Generator(object):
         return self._data
 
     def generate_data(self):
-        pass
+        while not isinstance(self._data, pd.DataFrame) or not self._is_valid():
+            self._generate_data()
 
     def write(self):
         if not isinstance(self._data, pd.DataFrame):

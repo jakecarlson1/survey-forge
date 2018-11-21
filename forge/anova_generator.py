@@ -18,17 +18,16 @@ class AnovaGenerator(Generator):
             self.num_respondents, self.num_groups, self.scale, self.f, self.f_tol
         )
 
-    def generate_data(self):
-        while self._data == None or not self.is_valid():
-            means_for_groups = self._gen_means_for_groups()
+    def _generate_data(self):
+        means_for_groups = self._gen_means_for_groups()
 
-            overall_mean = np.mean(means_for_groups)
+        overall_mean = np.mean(means_for_groups)
 
-            sst = self._calc_sum_squares_of_treatment(means_for_groups, overall_mean)
+        sst = self._calc_sum_squares_of_treatment(means_for_groups, overall_mean)
 
-            value_to_match = sst / (self.num_groups - 1) / self.f * (self.size - self.num_groups)
+        value_to_match = sst / (self.num_groups - 1) / self.f * (self.size - self.num_groups)
 
-            self._data = self._gen_data_to_match_sum_square_error(value_to_match, means_for_groups)
+        self._data = self._gen_data_to_match_sum_square_error(value_to_match, means_for_groups)
 
         self._data = self._convert_data_to_df(self._data)
 
@@ -65,8 +64,8 @@ class AnovaGenerator(Generator):
         approx_value = np.sqrt(sdev/self.num_respondents) + mean
         return np.random.normal(1, std, self.num_respondents) * approx_value
 
-    def is_valid(self):
-        F, p = stats.f_oneway(*self._data)
+    def _is_valid(self):
+        F, p = stats.f_oneway(*self._data.values)
         if np.absolute(F - self.f) < self.f_tol:
             return True
         return False

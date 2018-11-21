@@ -12,25 +12,24 @@ class RegressionGenerator(Generator):
         self.target_scale = params['target_scale']
         self.betas = params['norm_betas']
         self.betas_tol = params['betas_tol']
+        self.norm_features = None
+        self.norm_target = None
 
     def __str__(self):
         return "n: {}\t f: {}\t s: {}\t b: {}\t t: {}".format(
             self.num_respondents, self.num_feats, self.scales, self.betas, self.target_scale
         )
 
-    def generate_data(self):
-        norm_features = None
-        norm_target = None
-        while norm_features == None or not self.is_valid(norm_features, norm_target):
-            # generate values for the independent variable, mean half of scale
-            norm_features, norm_means = self._gen_normalized_features_for_betas()
+    def _generate_data(self):
+        # generate values for the independent variable, mean half of scale
+        self.norm_features, norm_means = self._gen_normalized_features_for_betas()
 
-            # generate values for dependent variable so the covariance matches beta * var(x)
-            vals_to_match = [self.betas[i] * np.var(norm_features[i]) for i in range(self.num_feats)]
+        # generate values for dependent variable so the covariance matches beta * var(x)
+        vals_to_match = [self.betas[i] * np.var(self.norm_features[i]) for i in range(self.num_feats)]
 
-            norm_target = self._gen_normalized_target_for_features(norm_features, norm_means, vals_to_match)
+        self.norm_target = self._gen_normalized_target_for_features(self.norm_features, norm_means, vals_to_match)
 
-        self._data = self._gen_data_from_normalized_features(norm_features, norm_target)
+        self._data = self._gen_data_from_normalized_features(self.norm_features, self.norm_target)
 
     def _gen_normalized_features_for_betas(self):
         features = []
@@ -70,13 +69,11 @@ class RegressionGenerator(Generator):
 
         return target
 
-    def is_valid(self, norm_feats, norm_target):
-        reg = LinearRegression().fit(norm_feats[0].reshape(-1, 1), norm_target)
-        print(self.betas)
-        print(reg.coef_)
-        if np.absolute(reg.coef_[0] - self.betas[0]) > self.betas_tol[0]:
-            return False
-        return True
+    def _is_valid(self):
+        reg = LinearRegression().fit(self.norm_features[0].reshape(-1, 1), self.norm_target)
+        if np.absolute(reg.coef_[0] - self.betas[0]) < self.betas_tol[0]:
+            return True
+        return False
 
     def _gen_data_from_normalized_features(self, norm_features, norm_targets):
         data = pd.DataFrame(

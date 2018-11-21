@@ -114,15 +114,10 @@ class AlphaGenerator(Generator):
         # need to make item responses match score distribution
         sums_of_respondents = data.sum(axis=1)
         realized_var_of_scores = np.var(sums_of_respondents)
-        print(realized_var_of_scores, variance_of_scores)
 
         return data
 
-    def generate_data(self):
-        while not isinstance(self._data, pd.DataFrame) or np.absolute(self.calc_coeff_alpha() - self.alpha) > self.alpha_tol:
-            self._generate_data_to_match_alpha()
-
-    def _generate_data_to_match_alpha(self):
+    def _generate_data(self):
         # goal is to make sum of variance in item responses / variance in 
         # respondent scores equal this value
         value_to_match = 1 - ((self.num_items - 1) / self.num_items) * self.alpha        
@@ -142,4 +137,9 @@ class AlphaGenerator(Generator):
 
         # sample values for items such that the score is met for each respondent
         self._data = self._gen_data_with_distributions(scores, variance_of_scores, mean_per_item, variance_per_item)
+
+    def _is_valid(self):
+        if np.absolute(self.calc_coeff_alpha() - self.alpha) < self.alpha_tol:
+            return True
+        return False
 
